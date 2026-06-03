@@ -15,3 +15,5 @@ Each task should link to:
 ## Template
 
 Copy `_template.md` when creating a task.
+
+Use `_user-request-template.md` when asking an agent to create a task from a prompt.
