@@ -1,0 +1,32 @@
+{
+  "name": "galperin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-powered supplier scraper.",
+  "license": "MIT",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace @galperin/shared && npm run build --workspace @galperin/api && npm run build --workspace @galperin/web",
+    "dev:api": "npm run dev --workspace @galperin/api",
+    "dev:web": "npm run dev --workspace @galperin/web",
+    "docker:down": "docker compose -f infra/docker-compose.yml down",
+    "docker:up": "docker compose -f infra/docker-compose.yml up -d",
+    "format": "prettier --write .",
+    "prisma:generate": "npm run prisma:generate --workspace @galperin/api",
+    "prisma:migrate": "npm run prisma:migrate --workspace @galperin/api",
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspace @galperin/shared && npm run build --workspace @galperin/shared && npm run typecheck --workspace @galperin/api && npm run typecheck --workspace @galperin/web"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "prettier": "^3.8.3",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.8"
+  }
+}

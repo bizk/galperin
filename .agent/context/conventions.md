@@ -5,7 +5,7 @@
 - Use English for code, documentation, plans, and handoffs.
 - Prefer explicit plans before non-trivial implementation.
 - Keep changes scoped to the active task.
-- Do not create git commits unless the user explicitly asks.
+- Keep changes small as possible. Avoid overdoing solutions.
 - Preserve user changes and avoid reverting unrelated work.
 
 ## Work Records

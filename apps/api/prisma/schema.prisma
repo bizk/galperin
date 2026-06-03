@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SearchTaskStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum ScrapeJobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model SearchTask {
+  id           String             @id @default(cuid())
+  query        String
+  status       SearchTaskStatus   @default(PENDING)
+  supplierKeys String[]
+  errorMessage String?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  scrapeJobs   ScrapeJob[]
+  products     SupplierProduct[]
+}
+
+model ScrapeJob {
+  id           String          @id @default(cuid())
+  searchTaskId String
+  supplierKey  String
+  status       ScrapeJobStatus @default(PENDING)
+  attempts     Int             @default(0)
+  startedAt    DateTime?
+  finishedAt   DateTime?
+  errorMessage String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  searchTask   SearchTask      @relation(fields: [searchTaskId], references: [id], onDelete: Cascade)
+
+  @@index([searchTaskId])
+  @@index([supplierKey])
+}
+
+model Supplier {
+  key         String   @id
+  displayName String
+  isEnabled   Boolean  @default(true)
+  capabilities Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SupplierProduct {
+  id                   String     @id @default(cuid())
+  searchTaskId         String
+  supplierKey          String
+  title                String
+  productUrl           String
+  imageUrl             String?
+  price                String?
+  minimumOrderQuantity String?
+  supplierName         String?
+  supplierRating       String?
+  rawPayload           Json
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+  searchTask           SearchTask @relation(fields: [searchTaskId], references: [id], onDelete: Cascade)
+
+  @@index([searchTaskId])
+  @@index([supplierKey])
+}
